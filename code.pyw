@@ -1,12 +1,14 @@
-def value_checker(player1, player2, ground, x1, y1, x):
+def value_checker(player1, player2, ground, x1, y1, x, counter):
     #print(x1,y1)
     if(x1>2 or y1>2 or x1<0 or y1<0):
         print("ERROR::XXXX, OUT OF BOUNDS ")
-        go(player1, player2, ground, x)
+        counter -=1
+        go(player1, player2, ground, x, counter)
         
     elif(ground[x1][y1] != '-'):
         print("ERROR::XXXX, YOU CANNOT OVERWRITE THE VALUE ")
-        go(player1, player2, ground, x)
+        counter -=1
+        go(player1, player2, ground, x, counter)
     else:
         return 
     
@@ -44,11 +46,18 @@ def gro(ground):
         print()
     print()
     
-def go(player1, player2, ground,x):
+def go(player1, player2, ground,x,counter):
     gro(ground)
+    counter += 1
+    if(counter == 10):
+        counter = 0 
+        print("DRAW :-(")
+        main()
+        
     x1 = int(input("Enter the x-axis "))
     y1 = int(input("Enter the y-axis "))
-    value_checker(player1, player2, ground, x1, y1, x)
+    value_checker(player1, player2, ground, x1, y1, x, counter)
+   
     if(x==0):
         player = player1
         ground[x1][y1] = 'X'
@@ -58,9 +67,10 @@ def go(player1, player2, ground,x):
         ground[x1][y1] = 'O'
         x = 0
     if(algo_check(ground,ground[x1][y1])==True):
+        counter = 0
         print(player," won")
         return main()
-    go(player1,player2,ground,x)
+    go(player1,player2,ground,x,counter)
 
 def main():
     print()
@@ -69,6 +79,6 @@ def main():
     player2 = input("Enter the name of the second player ")
     ground = [['-','-','-'],['-','-','-'],['-','-','-']]
     x = 0
-    go(player1, player2, ground, x)
-    
+    go(player1, player2, ground, x,0)
+
 main()
